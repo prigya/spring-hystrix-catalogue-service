@@ -24,6 +24,9 @@ public class CatalogueServiceDelegate {
 	 
 	        System.out.println("Getting Product details for " + category);
 	        String urlString = productDetailsURL +"/getProductDetailsForCategory/"+category;
+	        
+	        System.out.println(" product service url : "+ urlString);
+	        		
 	        String response = restTemplate
 	                .exchange(urlString
 	                , HttpMethod.GET
