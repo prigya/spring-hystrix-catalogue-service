@@ -2,6 +2,7 @@ package com.leanfix.springhystrixcatalogueservice;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,14 +15,17 @@ public class CatalogueServiceDelegate {
 	
 	 @Autowired
 	    RestTemplate restTemplate;
+	 
+	 @Value("${microservice.product.service.url}")
+		private String productDetailsURL;
 	     
 	    @HystrixCommand(fallbackMethod = "callProductServiceAndGetData_Fallback")
 	    public String callProductServiceAndGetData(String category) {
 	 
 	        System.out.println("Getting Product details for " + category);
-	 
+	        String urlString = productDetailsURL +"/getProductDetailsForCategory/"+category;
 	        String response = restTemplate
-	                .exchange("http://localhost:8098/getProductDetailsForCategory/{category}"
+	                .exchange(urlString
 	                , HttpMethod.GET
 	                , null
 	                , new ParameterizedTypeReference<String>() {
@@ -29,7 +33,7 @@ public class CatalogueServiceDelegate {
 	 
 	        System.out.println("Response Received as " + response + " -  " + new Date());
 	 
-	        return "NORMAL FLOW !!! - Product Name -  " + category + " :::  " +
+	        return "NORMAL FLOW !!! - Product Category Name -  " + category + " :::  " +
 	                    " Product Details " + response + " -  " + new Date();
 	    }
 	     
